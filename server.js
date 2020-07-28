@@ -8,7 +8,7 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+/*process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; */
 
 const db = knex({
   client: 'pg',
@@ -20,8 +20,15 @@ const db = knex({
 
 const app = express();
 
-app.use(cors())
+/*app.use(cors())*/
 app.use(express.json());
+
+app.use((req, res, next) => {
+    res.append('Access-Control-Allow-Origin', ['*']);
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.get('/', (req, res)=> { res.send("It works!") })
 app.post('/signin', signin.handleSignin(db, bcrypt))
